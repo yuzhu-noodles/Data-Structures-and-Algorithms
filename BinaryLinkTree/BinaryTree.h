@@ -30,4 +30,13 @@ typedef struct
 void InitBT(BinaryTree* tree);
 //构建二叉树，外部需要对结点分配内存
 int CreatBT(TreeNode* root);
+//测试版
+int CreatBT_Test(TreeNode* root);
+
+//前序遍历
+void PreOrderTraverse(TreeNode* node);
+//中序遍历
+void InOrderTraverse(TreeNode* node);
+//后续遍历
+void PostOrderTraverse(TreeNode* node);
 #endif
