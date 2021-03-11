@@ -15,5 +15,14 @@ typedef struct
 int CreatUDG(MatrixGraph* G);
 //返回某个顶点在顶点集合中的下标
 int LocatVex(MatrixGraph* G, VerTexType vex);
+//测试无向图
+void TestMatrixGraph_UDG();
+//创建有向图
+int CreatDG(MatrixGraph* G);
+//测试有向图
+void TestMatrixGraph_DG();
+//创建有向网
+int CreatDN(MatrixGraph* G);
+//测试有向网
+void TestMatrixGraph_DN();
 
-void TestMatrixGraph();

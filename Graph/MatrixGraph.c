@@ -14,7 +14,7 @@ int CreatUDG(MatrixGraph* G)
 	for (int i = 0; i < G->verTexCount; i++)
 	{
 		G->verTexs[i] = (VerTexType)malloc(sizeof(char) * 10);
-		printf("顶点%d:",i);
+		printf("顶点%d:",i+1);
 		scanf("%s", G->verTexs[i]);
 	}
 	//初始化邻接矩阵，所有边的权值=0
@@ -63,7 +63,7 @@ int LocatVex(MatrixGraph* G, VerTexType vex)
 	return index == G->verTexCount ? -1 : index;
 }
 
-void TestMatrixGraph()
+void TestMatrixGraph_UDG()
 {
 	MatrixGraph G;
 	int status = CreatUDG(&G);
@@ -87,13 +87,165 @@ void TestMatrixGraph()
 			printf("\t%d", G.arcs[i][j]);
 		}
 		printf("\n");
+	}
+}
 
+//创建有向图
+int CreatDG(MatrixGraph* G)
+{
+	G->type = DG;   //设置类型为无向图
+	printf("请输入向图的顶点数：");
+	scanf("%d", &G->verTexCount);
+	printf("请输入向图的边数：");
+	scanf("%d", &G->arcCount);
+	printf("依次输入顶点信息\n");
+	for (int i = 0; i < G->verTexCount; i++)
+	{
+		G->verTexs[i] = (VerTexType)malloc(sizeof(char) * 10);
+		printf("顶点%d:", i+1);
+		scanf("%s", G->verTexs[i]);
+	}
+	//初始化邻接矩阵，所有边的权值=0
+	for (int i = 0; i < G->verTexCount; i++)
+	{
+		for (int j = 0; j < G->verTexCount; j++)
+		{
+			G->arcs[i][j] = 0;
+		}
+	}
+	printf("请输入顶点和邻接顶点信息，构建邻接矩阵\n");
+	for (int i = 0; i < G->verTexCount; i++)
+	{
+		VerTexType vex1 = (VerTexType)malloc(sizeof(char) * 10);
+		VerTexType vex2 = (VerTexType)malloc(sizeof(char) * 10);
+		printf("顶点：");
+		scanf("%s", vex1);
+		printf("邻接点：");
+		scanf("%s", vex2);
+		//分别获得两个顶点在顶点数组中的坐标
+		int x = LocatVex(G, vex1);
+		int y = LocatVex(G, vex2);
+		if (x == -1 || y == -1)
+		{
+			return ERROR;
+		}
+		G->arcs[x][y] = 1;
+		free(vex1);
+		free(vex2);
+	}
+	return OK;
+}
+//测试有向图
+void TestMatrixGraph_DG()
+{
+	MatrixGraph G;
+	int status = CreatDG(&G);
+	if (status == ERROR)
+	{
+		printf("创建失败\n");
+		return;
+	}
+	printf("打印图的邻接矩阵\n");
+	printf("\t");
+	for (int i = 0; i < G.verTexCount; i++)
+	{
+		printf("\t%s", G.verTexs[i]);
+	}
+	printf("\n");
+	for (int i = 0; i < G.verTexCount; i++)
+	{
+		printf("\t%s", G.verTexs[i]);
+		for (int j = 0; j < G.verTexCount; j++)
+		{
+			printf("\t%d", G.arcs[i][j]);
+		}
+		printf("\n");
 	}
 }
 
 
+int CreatDN(MatrixGraph* G)
+{
+	G->type = DG;   //设置类型为无向图
+	printf("请输入向图的顶点数：");
+	scanf("%d", &G->verTexCount);
+	printf("请输入向图的边数：");
+	scanf("%d", &G->arcCount);
+	printf("依次输入顶点信息\n");
+	for (int i = 0; i < G->verTexCount; i++)
+	{
+		G->verTexs[i] = (VerTexType)malloc(sizeof(char) * 10);
+		printf("顶点%d:", i + 1);
+		scanf("%s", G->verTexs[i]);
+	}
+	//初始化邻接矩阵，所有边的权值=0
+	for (int i = 0; i < G->verTexCount; i++)
+	{
+		for (int j = 0; j < G->verTexCount; j++)
+		{
+			G->arcs[i][j] = INT_MAX;   //整形的最大值作为无穷大
+		}
+	}
+	printf("请输入顶点和邻接顶点信息，构建邻接矩阵\n");
+	for (int i = 0; i < G->verTexCount; i++)
+	{
+		VerTexType vex1 = (VerTexType)malloc(sizeof(char) * 10);
+		VerTexType vex2 = (VerTexType)malloc(sizeof(char) * 10);
+		printf("顶点：");
+		scanf("%s", vex1);
+		printf("邻接点：");
+		scanf("%s", vex2);
+		//分别获得两个顶点在顶点数组中的坐标
+		int x = LocatVex(G, vex1);
+		int y = LocatVex(G, vex2);
+		if (x == -1 || y == -1)
+		{
+			return ERROR;
+		}
+		int value;
+		printf("请输入权值：");
+		scanf("%d", &value);
+		G->arcs[x][y] = value;
+		free(vex1);
+		free(vex2);
+	}
+	return OK;
+}
+
+void TestMatrixGraph_DN()
+{
+	MatrixGraph G;
+	int status = CreatDN(&G);
+	if (status == ERROR)
+	{
+		printf("创建失败\n");
+		return;
+	}
+	printf("打印图的邻接矩阵\n");
+	printf("\t");
+	for (int i = 0; i < G.verTexCount; i++)
+	{
+		printf("\t%s", G.verTexs[i]);
+	}
+	printf("\n");
+	for (int i = 0; i < G.verTexCount; i++)
+	{
+		printf("\t%s", G.verTexs[i]);
+		for (int j = 0; j < G.verTexCount; j++)
+		{
+			if (G.arcs[i][j] == INT_MAX)
+				printf("\t∞");
+			else
+			    printf("\t%d", G.arcs[i][j]);
+		}
+		printf("\n");
+	}
+}
+
 int main()
 {
-	TestMatrixGraph();
+	/*TestMatrixGraph_UDG();*/
+	/*TestMatrixGraph_DG();*/
+	TestMatrixGraph_DN();
 	return 0;
 }
