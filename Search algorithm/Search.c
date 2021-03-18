@@ -30,7 +30,7 @@ void InitSeqList(SeqList* seqlist)
 	seqlist->length = 0;
 }
 
-//顺序查找，返回元素在顺序表中的位置，没查找到返回0
+//顺序查找，返回元素在顺序表中的位置，没查找到返回0         时间复杂度O(n)
 int SearchSeqList1(SeqList* seqlist,KeyType key)
 {
 	for (int i = 1; i < seqlist->length; i++)
@@ -52,8 +52,8 @@ int SearchSeqList2(SeqList* seqlist, KeyType key)
 }
 
 
-//二分查找法   //还可以使用递归，效率更高
-int SearchSeqListBinary(SeqList* seqlist, KeyType key)
+//二分查找法 (折半查找)   时间复杂度O(log2n)
+int SearchSeqListBinary1(SeqList* seqlist, KeyType key)
 {
 	int left = 0;
 	int right = seqlist->length;
@@ -69,6 +69,18 @@ int SearchSeqListBinary(SeqList* seqlist, KeyType key)
 	}
 	return 0;
 }
+//二分查找递归版本
+int SearchSeqListBinary2(SeqList* seqlist, KeyType key,int left,int right)
+{
+	int mid = left + (right - left) / 2;
+	if (seqlist->data[mid].key == key)
+		return mid;
+	if (seqlist->data[mid].key < key)
+		return SearchSeqListBinary2(seqlist, key, mid + 1, right);
+	if (seqlist->data[mid].key > key)
+		return SearchSeqListBinary2(seqlist, key, left, mid - 1);
+}
+
 //打印
 void PrintSeqList(SeqList* seqlist)
 {
@@ -77,9 +89,7 @@ void PrintSeqList(SeqList* seqlist)
 	{
 		printf("%d\t%s\n", seqlist->data[i].key, seqlist->data[i].value);
 	}
-	
 }
-
 //测试
 void Test()
 {
@@ -102,12 +112,9 @@ void Test()
 	int pos1 = SearchSeqList2(&seqlist, SearchKey);
 	printf("SearchKey = %d; pos = %d\n", SearchKey,pos1);
 	printf("二分查找:");
-	int pos2 = SearchSeqListBinary(&seqlist, SearchKey);
+	int pos2 = SearchSeqListBinary2(&seqlist, SearchKey,0,len-1);
 	printf("SearchKey = %d; pos = %d\n", SearchKey, pos2);
 }
-
-
-
 
 int main()
 {
